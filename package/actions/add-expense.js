@@ -1,13 +1,12 @@
 const fs = require("fs");
 const { expensesDataPath } = require("../constants");
+const { validateExpenseInput } = require("../utils");
 
 const addExpense = async (name, options) => {
   const { amount, description } = options;
 
-  if (amount < 0) {
-    console.error(`<====== FAILURE ======>`)
-    console.error(`Invalid amount '${amount}', expected a positive number.\n`)
-    return
+  if (!validateExpenseInput({ name, amount, description })) {
+    return;
   }
 
   if (!fs.existsSync(expensesDataPath)) {
@@ -33,7 +32,7 @@ const addExpense = async (name, options) => {
     fs.writeFile(expensesDataPath, JSON.stringify(expenses, null, 2), (err) => {
       if (err) throw err;
       console.log(`<====== SUCCESS ======>`)
-      console.log(`Expense with id ${newExpense.id} was added.`);
+      console.log(`Expense with id ${newExpense.id} was added.\n`);
     });
   });
 };
