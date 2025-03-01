@@ -20,7 +20,7 @@ const updateExpense = async (id, options) => {
     if (err) throw err;
 
     const expenses = data ? JSON.parse(data.toString(), null, 2) : [];
-    const expense = expenses.find((e) => e.id === Number(id));
+    const expense = expenses.find((e) => e.id === id);
     const now = new Date();
 
     if (!expense) {
@@ -37,7 +37,7 @@ const updateExpense = async (id, options) => {
     fs.writeFile(expensesDataPath, JSON.stringify(expenses, null, 2), (err) => {
       if (err) throw err;
       console.log(`<====== SUCCESS ======>`);
-      console.log(`Expense with id ${expense.id} was updated.`);
+      console.log(`Expense with id '${expense.id}' was updated.`);
     });
   });
 };
