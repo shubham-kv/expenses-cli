@@ -29,9 +29,9 @@ const updateExpense = async (id, options) => {
       return;
     }
 
-    expense.name = name;
-    expense.amount = amount;
-    expense.description = description;
+    if (name) expense.name = name;
+    if (amount) expense.amount = amount;
+    if (description) expense.description = description;
     expense.updatedAt = now;
 
     fs.writeFile(expensesDataPath, JSON.stringify(expenses, null, 2), (err) => {
