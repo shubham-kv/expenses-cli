@@ -3,7 +3,12 @@
 const { Command } = require("commander");
 const { name, description, version } = require("../package.json");
 
-const { addExpense, updateExpense, deleteExpense } = require("./actions");
+const {
+  addExpense,
+  updateExpense,
+  deleteExpense,
+  listExpenses,
+} = require("./actions");
 
 const program = new Command();
 
@@ -28,5 +33,10 @@ program
   .command("delete <id>")
   .description("Delete an expense with the given id.")
   .action(deleteExpense);
+
+program
+  .command("list")
+  .description("List all the expenses")
+  .action(listExpenses);
 
 program.parse(process.argv);

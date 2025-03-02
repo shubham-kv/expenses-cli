@@ -17,6 +17,7 @@
   "author": "Shubham Vishwakarma",
   "license": "ISC",
   "dependencies": {
+    "cli-table3": "^0.6.5",
     "commander": "^13.1.0",
     "nanoid": "^5.1.2"
   }
