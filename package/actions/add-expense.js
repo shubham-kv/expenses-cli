@@ -20,9 +20,9 @@ const addExpense = (name, options) => {
 
     const newExpense = {
       id: await generateNewId(),
-      name,
-      amount,
-      description,
+      name: name ?? '',
+      amount: parseFloat(amount),
+      description: description ?? '',
       createdAt: now,
       updatedAt: now,
     };
