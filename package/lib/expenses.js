@@ -4,13 +4,28 @@
  * total expenses of that month.
  *
  * @param {Array} expenses The expenses list
- * @param {String} sort Sort parameter either 'asc' | 'desc'
- * @returns The array of tuples in the form [month, amount]
+ * @param {{sort: 'asc' | 'desc'; month: number}} options A Object containing the month filter & sort parameter
+ * @returns The array of tuples in the form [month, totalMonthlyExpense]
  */
-const getExpensesSummary = (expenses, sort = "asc") => {
+const getExpensesSummary = (expenses, options) => {
   const summary = {};
+  const { sort, month } = options ?? { sort: "asc" };
+  let filteredExpenses = expenses;
 
-  expenses.forEach((e) => {
+  if (month && month >= 1 && month <= 12) {
+    const now = new Date();
+
+    filteredExpenses = expenses.filter((e) => {
+      const timestampDate = new Date(e.createdAt);
+
+      return (
+        timestampDate.getMonth() === month - 1 &&
+        timestampDate.getFullYear() === now.getFullYear()
+      );
+    });
+  }
+
+  filteredExpenses.forEach((e) => {
     const timestampDate = new Date(e.createdAt);
     timestampDate.setDate(1);
     timestampDate.setHours(0, 0, 0, 0);

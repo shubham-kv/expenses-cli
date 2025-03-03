@@ -42,7 +42,12 @@ program
 
 program
   .command("summary")
-  .description("Summary of the expenses by month")
+  .description("Get the summary of your expenses by month")
+  .option(
+    "-m, --month <month>",
+    "Number representing the month of the current year to show the summary for, from 1 - 12, 1 for January, 12 for December",
+    parseInt
+  )
   .action(viewExpenseSummary);
 
 program.parse(process.argv);
