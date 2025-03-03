@@ -8,6 +8,7 @@ const {
   updateExpense,
   deleteExpense,
   listExpenses,
+  viewExpenseSummary,
 } = require("./actions");
 
 const program = new Command();
@@ -38,5 +39,10 @@ program
   .command("list")
   .description("List all the expenses")
   .action(listExpenses);
+
+program
+  .command("summary")
+  .description("Summary of the expenses by month")
+  .action(viewExpenseSummary);
 
 program.parse(process.argv);

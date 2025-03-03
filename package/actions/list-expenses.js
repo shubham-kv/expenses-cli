@@ -1,5 +1,6 @@
 const fs = require("fs");
 const Table = require("cli-table3");
+const { formatCurrency } = require("../utils");
 const { expensesDataPath } = require("../constants");
 
 const listExpenses = () => {
@@ -16,20 +17,13 @@ const listExpenses = () => {
       style: { head: {}, compact: true },
     });
 
-    const locale = Intl.DateTimeFormat().resolvedOptions().locale;
-
-    const currencyFormat = new Intl.NumberFormat(locale, {
-      style: "currency",
-      currency: "USD",
-    });
-
     table.push(
       ...expenses.map((e, i) => [
         i + 1,
         e.id,
         new Date(e.createdAt).toLocaleString(),
         e.name,
-        currencyFormat.format(e.amount),
+        formatCurrency(e.amount),
         e.description,
       ])
     );
