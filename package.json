@@ -1,7 +1,8 @@
 {
   "name": "@shubhamkv/expenses-cli",
   "description": "CLI tool to manage your expenses",
-  "version": "0.1.0-dev",
+  "version": "1.0.0",
+  "main": "./package/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\""
   },
@@ -25,7 +26,8 @@
     "semantic-release": "^24.2.3"
   },
   "files": [
-    "package", "README.md"
+    "package",
+    "README.md"
   ],
   "publishConfig": {
     "access": "public"
