@@ -1,13 +1,9 @@
 {
-  "name": "expenses-cli",
+  "name": "@shubhamkv/expenses-cli",
   "description": "CLI tool to manage your expenses",
-  "version": "1.0.0",
-  "main": "./package/index.js",
+  "version": "0.1.0-dev",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "bin": {
-    "expenses": "./package/index.js"
+    "test": "echo \"Error: no test specified\""
   },
   "keywords": [
     "cli",
@@ -21,5 +17,14 @@
     "commander": "^13.1.0",
     "date-fns": "^4.1.0",
     "nanoid": "^5.1.2"
+  },
+  "devDependencies": {
+    "semantic-release": "^24.2.3"
+  },
+  "files": [
+    "package", "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }
