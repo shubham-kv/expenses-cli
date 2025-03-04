@@ -5,6 +5,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\""
   },
+  "bin": {
+    "expenses": "./package/index.js"
+  },
   "keywords": [
     "cli",
     "expenses",
