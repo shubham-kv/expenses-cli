@@ -1,20 +1,21 @@
-const fs = require("fs");
-const Table = require("cli-table3");
-const { formatCurrency } = require("../utils");
-const { expensesDataPath } = require("../constants");
+import fs from "fs";
+import Table from "cli-table3";
+import { formatCurrency } from "../utils";
+import { expensesDataPath } from "../constants";
+import { Expense } from "../types";
 
-const listExpenses = () => {
+export function listExpenses() {
   if (!fs.existsSync(expensesDataPath)) {
     fs.writeFileSync(expensesDataPath, JSON.stringify([], null, 2));
   }
 
   fs.readFile(expensesDataPath, "ascii", async (err, data) => {
     if (err) throw err;
-    const expenses = data ? JSON.parse(data.toString(), null, 2) : [];
+    const expenses = (data ? JSON.parse(data) : []) as Expense[];
 
     const table = new Table({
       head: ["No.", "Id", "Timestamp", "Name", "Amount", "Description"],
-      style: { head: {}, compact: true },
+      style: { head: [], compact: true },
     });
 
     table.push(
@@ -30,8 +31,4 @@ const listExpenses = () => {
 
     console.log(table.toString());
   });
-};
-
-module.exports = {
-  listExpenses,
-};
+}

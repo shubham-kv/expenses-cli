@@ -1,14 +1,24 @@
+import { Expense } from "../types";
+
+type GetExpensesSummaryOptions = {
+  sort: "asc" | "desc";
+  month?: number;
+};
+
 /**
  * Calculates the monthly expenses & returns a sorted array of tuples where the
  * first element of the tuple is the month & second element of the tuple is the
  * total expenses of that month.
  *
- * @param {Array} expenses The expenses list
- * @param {{sort: 'asc' | 'desc'; month: number}} options A Object containing the month filter & sort parameter
+ * @param expenses The expenses list
+ * @param options A Object containing the month filter & sort parameter
  * @returns The array of tuples in the form [month, totalMonthlyExpense]
  */
-const getExpensesSummary = (expenses, options) => {
-  const summary = {};
+export const getExpensesSummary = (
+  expenses: Expense[],
+  options: GetExpensesSummaryOptions
+): [string, number][] => {
+  const summary: Record<string, number> = {};
   const { sort, month } = options ?? { sort: "asc" };
   let filteredExpenses = expenses;
 
@@ -57,16 +67,11 @@ const getExpensesSummary = (expenses, options) => {
 
 /**
  * Calculates and returns the sum of all the expenses.
- * @param {Array} expenses The expenses array
+ * @param expenses The expenses array
  * @returns The sum of all expenses
  */
-const calculateTotalExpenses = (expenses) => {
+export const calculateTotalExpenses = (expenses: Expense[]) => {
   let totalExpenses = 0;
   expenses.forEach((e) => (totalExpenses += Number(e.amount)));
   return totalExpenses;
-};
-
-module.exports = {
-  getExpensesSummary,
-  calculateTotalExpenses,
 };

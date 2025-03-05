@@ -1,4 +1,4 @@
-const formatCurrency = (number) => {
+export const formatCurrency = (value: number) => {
   const locale = Intl.DateTimeFormat().resolvedOptions().locale;
 
   const currencyNumberFormat = new Intl.NumberFormat(locale, {
@@ -6,9 +6,5 @@ const formatCurrency = (number) => {
     currency: "USD",
   });
 
-  return currencyNumberFormat.format(number);
-};
-
-module.exports = {
-  formatCurrency,
+  return currencyNumberFormat.format(value);
 };

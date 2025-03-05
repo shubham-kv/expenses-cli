@@ -1,4 +1,13 @@
-const validateExpenseInput = (params) => {
+import { Expense } from "../types";
+
+type ValidateExpenseInputParams = Pick<
+  Expense,
+  "name" | "amount" | "description"
+>;
+
+export const validateExpenseInput = (
+  params: ValidateExpenseInputParams
+): boolean => {
   const { name, amount, description } = params;
 
   if (!name && !amount && !description) {
@@ -26,8 +35,4 @@ const validateExpenseInput = (params) => {
   }
 
   return true;
-};
-
-module.exports = {
-  validateExpenseInput,
 };

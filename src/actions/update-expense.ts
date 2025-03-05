@@ -1,8 +1,11 @@
-const fs = require("fs");
-const { expensesDataPath } = require("../constants");
-const { validateExpenseInput } = require("../utils");
+import fs from "fs";
+import { validateExpenseInput } from "../utils";
+import { expensesDataPath } from "../constants";
+import { Expense } from "../types";
 
-const updateExpense = async (id, options) => {
+type UpdateExpenseOptions = Pick<Expense, "name" | "amount" | "description">;
+
+export function updateExpense(id: string, options: UpdateExpenseOptions) {
   const { name, amount, description } = options;
 
   if (!validateExpenseInput({ name, amount, description })) {
@@ -19,7 +22,7 @@ const updateExpense = async (id, options) => {
   fs.readFile(expensesDataPath, "ascii", (err, data) => {
     if (err) throw err;
 
-    const expenses = data ? JSON.parse(data.toString(), null, 2) : [];
+    const expenses = (data ? JSON.parse(data) : []) as Expense[];
     const expense = expenses.find((e) => e.id === id);
     const now = new Date();
 
@@ -40,8 +43,4 @@ const updateExpense = async (id, options) => {
       console.log(`Expense with id '${expense.id}' was updated.`);
     });
   });
-};
-
-module.exports = {
-  updateExpense,
-};
+}
