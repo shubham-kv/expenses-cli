@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-const { Command } = require("commander");
-const { name, description, version } = require("../package.json");
+import { Command } from "commander";
+import { name, description, version } from "../package.json";
 
-const {
+import {
   addExpense,
   updateExpense,
   deleteExpense,
   listExpenses,
   viewExpenseSummary,
-} = require("./actions");
+} from "./actions";
 
 const program = new Command();
 
@@ -19,7 +19,7 @@ program
   .command("add <name>")
   .description("Add a new expense.")
   .option("-d, --description <description>", "Text describing the expense")
-  .option("-a, --amount <amount>", "Expense amount")
+  .option("-a, --amount <amount>", "Expense amount", parseFloat)
   .action(addExpense);
 
 program
@@ -27,7 +27,7 @@ program
   .description("Edit an existing expense with the given id.")
   .option("-n, --name <name>", "Name of the expense")
   .option("-d, --description <description>", "Text describing the expense")
-  .option("-a, --amount <amount>", "Expense amount")
+  .option("-a, --amount <amount>", "Expense amount", parseFloat)
   .action(updateExpense);
 
 program

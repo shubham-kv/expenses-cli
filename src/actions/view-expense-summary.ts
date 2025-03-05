@@ -1,16 +1,17 @@
-const fs = require("fs");
-const dateFns = require("date-fns");
-const Table = require("cli-table3");
+import fs from "fs";
+import dateFns from "date-fns";
+import Table from "cli-table3";
 
-const {
-  getExpensesSummary,
-  calculateTotalExpenses,
-} = require("../lib/expenses");
+import { getExpensesSummary, calculateTotalExpenses } from "../lib/expenses";
+import { formatCurrency, validateViewSummaryOptions } from "../utils";
+import { expensesDataPath } from "../constants";
+import { Expense } from "../types";
 
-const { formatCurrency, validateViewSummaryOptions } = require("../utils");
-const { expensesDataPath } = require("../constants");
+type ViewSummaryOptions = {
+  month: number;
+};
 
-const viewExpenseSummary = (options) => {
+export function viewExpenseSummary(options: ViewSummaryOptions) {
   const { month } = options;
 
   if (!validateViewSummaryOptions(options)) {
@@ -28,7 +29,7 @@ const viewExpenseSummary = (options) => {
 
   fs.readFile(expensesDataPath, "ascii", async (err, data) => {
     if (err) throw err;
-    const expenses = data ? JSON.parse(data.toString(), null, 2) : [];
+    const expenses = (data ? JSON.parse(data) : []) as Expense[];
 
     if (expenses.length === 0) {
       console.error(`<====== FAILURE ======>`);
@@ -56,7 +57,7 @@ const viewExpenseSummary = (options) => {
 
     const table = new Table({
       head: ["No.", "Month", "Expenses"],
-      style: { head: {}, compact: true },
+      style: { head: [], compact: true },
     });
 
     table.push(
@@ -78,8 +79,4 @@ const viewExpenseSummary = (options) => {
 
     console.log(table.toString() + "\n");
   });
-};
-
-module.exports = {
-  viewExpenseSummary,
-};
+}

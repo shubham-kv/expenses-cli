@@ -1,5 +1,11 @@
-const validateViewSummaryOptions = (options) => {
-  const { month } = options;
+type ValidateViewSummaryParams = {
+  month: number;
+};
+
+export const validateViewSummaryOptions = (
+  params: ValidateViewSummaryParams
+): boolean => {
+  const { month } = params;
 
   if (typeof month === "number" && !(month >= 1 && month <= 12)) {
     console.error(`<====== FAILURE ======>`);
@@ -10,8 +16,4 @@ const validateViewSummaryOptions = (options) => {
   }
 
   return true;
-};
-
-module.exports = {
-  validateViewSummaryOptions,
 };

@@ -1,8 +1,11 @@
-const fs = require("fs");
-const { expensesDataPath } = require("../constants");
-const { validateExpenseInput, generateNewId } = require("../utils");
+import fs from "fs";
+import { validateExpenseInput, generateNewId } from "../utils";
+import { expensesDataPath } from "../constants";
+import { Expense } from "../types";
 
-const addExpense = (name, options) => {
+type AddExpenseOptions = Pick<Expense, 'amount'|'description'>;
+
+export function addExpense(name: string, options: AddExpenseOptions) {
   const { amount, description } = options;
 
   if (!validateExpenseInput({ name, amount, description })) {
@@ -13,16 +16,16 @@ const addExpense = (name, options) => {
     fs.writeFileSync(expensesDataPath, JSON.stringify([], null, 2));
   }
 
-  fs.readFile(expensesDataPath, "ascii", async (err, data) => {
+  fs.readFile(expensesDataPath, "ascii", (err, data) => {
     if (err) throw err;
-    const expenses = data ? JSON.parse(data.toString(), null, 2) : [];
+    const expenses = (data ? JSON.parse(data) : []) as Expense[];
     const now = new Date();
 
-    const newExpense = {
-      id: await generateNewId(),
-      name: name ?? '',
-      amount: parseFloat(amount),
-      description: description ?? '',
+    const newExpense: Expense = {
+      id: generateNewId(),
+      name: name ?? "",
+      amount: amount,
+      description: description ?? "",
       createdAt: now,
       updatedAt: now,
     };
@@ -35,8 +38,4 @@ const addExpense = (name, options) => {
       console.log(`Expense with id '${newExpense.id}' was added.\n`);
     });
   });
-};
-
-module.exports = {
-  addExpense,
-};
+}

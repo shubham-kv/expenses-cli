@@ -1,7 +1,8 @@
-const fs = require("fs");
-const { expensesDataPath } = require("../constants");
+import fs from "fs";
+import { expensesDataPath } from "../constants";
+import { Expense } from "../types";
 
-const deleteExpense = async (id) => {
+export function deleteExpense(id: string) {
   if (!fs.existsSync(expensesDataPath)) {
     fs.writeFileSync(expensesDataPath, JSON.stringify([], null, 2));
     console.error(`<====== FAILURE ======>`);
@@ -11,7 +12,7 @@ const deleteExpense = async (id) => {
 
   fs.readFile(expensesDataPath, "ascii", (err, data) => {
     if (err) throw err;
-    const expenses = data ? JSON.parse(data.toString(), null, 2) : [];
+    const expenses = (data ? JSON.parse(data) : []) as Expense[];
     const expenseIndex = expenses.findIndex((e) => e.id === id);
 
     if (expenseIndex < 0) {
@@ -28,8 +29,4 @@ const deleteExpense = async (id) => {
       console.log(`Expense with id '${id}' was deleted.`);
     });
   });
-};
-
-module.exports = {
-  deleteExpense,
-};
+}
