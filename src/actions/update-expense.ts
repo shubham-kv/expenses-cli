@@ -15,7 +15,7 @@ export function updateExpense(id: string, options: UpdateExpenseOptions) {
   if (!fs.existsSync(expensesDataPath)) {
     fs.writeFileSync(expensesDataPath, JSON.stringify([], null, 2));
     console.error(`<====== FAILURE ======>`);
-    console.error(`No Expense found with id '${id}'`);
+    console.error(`No Expense found with id '${id}'.\n`);
     return;
   }
 
@@ -28,7 +28,7 @@ export function updateExpense(id: string, options: UpdateExpenseOptions) {
 
     if (!expense) {
       console.error(`<====== FAILURE ======>`);
-      console.error(`No Expense found with id '${id}'.`);
+      console.error(`No Expense found with id '${id}'.\n`);
       return;
     }
 
@@ -40,7 +40,7 @@ export function updateExpense(id: string, options: UpdateExpenseOptions) {
     fs.writeFile(expensesDataPath, JSON.stringify(expenses, null, 2), (err) => {
       if (err) throw err;
       console.log(`<====== SUCCESS ======>`);
-      console.log(`Expense with id '${expense.id}' was updated.`);
+      console.log(`Expense with id '${expense.id}' was updated.\n`);
     });
   });
 }
