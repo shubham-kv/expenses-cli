@@ -29,6 +29,6 @@ export function listExpenses() {
       ])
     );
 
-    console.log(table.toString());
+    console.log(table.toString() + '\n');
   });
 }
