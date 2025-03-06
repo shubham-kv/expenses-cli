@@ -6,7 +6,7 @@ export function deleteExpense(id: string) {
   if (!fs.existsSync(expensesDataPath)) {
     fs.writeFileSync(expensesDataPath, JSON.stringify([], null, 2));
     console.error(`<====== FAILURE ======>`);
-    console.error(`No Expense found with id '${id}'`);
+    console.error(`No Expense found with id '${id}'.\n`);
     return;
   }
 
@@ -17,7 +17,7 @@ export function deleteExpense(id: string) {
 
     if (expenseIndex < 0) {
       console.error(`<====== FAILURE ======>`);
-      console.error(`No Expense found with id '${id}'.`);
+      console.error(`No Expense found with id '${id}'.\n`);
       return;
     }
 
@@ -26,7 +26,7 @@ export function deleteExpense(id: string) {
     fs.writeFile(expensesDataPath, JSON.stringify(expenses, null, 2), (err) => {
       if (err) throw err;
       console.log(`<====== SUCCESS ======>`);
-      console.log(`Expense with id '${id}' was deleted.`);
+      console.log(`Expense with id '${id}' was deleted.\n`);
     });
   });
 }
