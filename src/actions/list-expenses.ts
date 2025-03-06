@@ -7,6 +7,11 @@ import { Expense } from "../types";
 export function listExpenses() {
   if (!fs.existsSync(expensesDataPath)) {
     fs.writeFileSync(expensesDataPath, JSON.stringify([], null, 2));
+    console.error(`<====== FAILURE ======>`);
+    console.error(
+      `No Expenses found, add your expenses with the 'add' command.\n`
+    );
+    return;
   }
 
   fs.readFile(expensesDataPath, "ascii", async (err, data) => {
@@ -29,6 +34,6 @@ export function listExpenses() {
       ])
     );
 
-    console.log(table.toString() + '\n');
+    console.log(table.toString() + "\n");
   });
 }
