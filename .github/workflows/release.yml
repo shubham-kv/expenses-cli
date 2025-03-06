@@ -49,6 +49,10 @@ jobs:
         with:
           name: dist-files
           path: dist/
+      - name: List all files
+        run: ls -la
+      - name: List dist files
+        run: ls -la dist
       - name: Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
