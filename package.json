@@ -6,7 +6,8 @@
   "type": "commonjs",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "tsc -p ./tsconfig.build.json"
+    "build": "tsc -p ./tsconfig.build.json",
+    "postbuild": "if [ \"$(uname -s)\" = \"Darwin\" ] || [ \"$(uname -s)\" = \"Linux\" ]; then chmod +x dist/index.js; fi"
   },
   "bin": {
     "expenses": "dist/index.js"
