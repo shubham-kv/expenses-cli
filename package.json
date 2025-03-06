@@ -7,10 +7,12 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "tsc -p ./tsconfig.build.json",
-    "postbuild": "if [ \"$(uname -s)\" = \"Darwin\" ] || [ \"$(uname -s)\" = \"Linux\" ]; then chmod +x dist/index.js; fi"
+    "set-executable": "if [ \"$(uname -s)\" = \"Darwin\" ] || [ \"$(uname -s)\" = \"Linux\" ]; then chmod +x ./dist/index.js; fi",
+    "postbuild": "npm run set-executable",
+    "postinstall": "npm run set-executable"
   },
   "bin": {
-    "expenses": "dist/index.js"
+    "expenses": "./dist/index.js"
   },
   "keywords": [
     "cli",
