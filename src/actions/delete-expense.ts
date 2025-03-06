@@ -6,7 +6,7 @@ export function deleteExpense(id: string) {
   if (!fs.existsSync(expensesDataPath)) {
     fs.writeFileSync(expensesDataPath, JSON.stringify([], null, 2));
     console.error(`<====== FAILURE ======>`);
-    console.error(`No Expense found with id '${id}'`);
+    console.error(`No Expense found with id '${id}'.\n`);
     return;
   }
 
