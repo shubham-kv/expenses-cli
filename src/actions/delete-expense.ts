@@ -1,32 +1,19 @@
-import fs from "fs";
-import { expensesDataPath } from "../constants";
-import { Expense } from "../types";
+import { deleteExpense } from "../lib/expenses-io";
 
-export function deleteExpense(id: string) {
-  if (!fs.existsSync(expensesDataPath)) {
-    fs.writeFileSync(expensesDataPath, JSON.stringify([], null, 2));
-    console.error(`<====== FAILURE ======>`);
-    console.error(`No Expense found with id '${id}'.\n`);
-    return;
-  }
+export async function deleteExpenseAction(id: string) {
+  try {
+    const deletedExpense = await deleteExpense(id);
 
-  fs.readFile(expensesDataPath, "ascii", (err, data) => {
-    if (err) throw err;
-    const expenses = (data ? JSON.parse(data) : []) as Expense[];
-    const expenseIndex = expenses.findIndex((e) => e.id === id);
-
-    if (expenseIndex < 0) {
+    if (!deletedExpense) {
       console.error(`<====== FAILURE ======>`);
       console.error(`No Expense found with id '${id}'.\n`);
-      return;
-    }
-
-    expenses.splice(expenseIndex, 1);
-
-    fs.writeFile(expensesDataPath, JSON.stringify(expenses, null, 2), (err) => {
-      if (err) throw err;
+    } else {
       console.log(`<====== SUCCESS ======>`);
-      console.log(`Expense with id '${id}' was deleted.\n`);
-    });
-  });
+      console.log(`Expense with id '${deletedExpense.id}' was deleted.\n`);
+    }
+  } catch (e) {
+    console.error(`<====== OOPS ======>`);
+    console.error(`Something went wrong while updating expense`);
+    console.error(e);
+  }
 }

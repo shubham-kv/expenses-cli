@@ -1,46 +1,30 @@
-import fs from "fs";
+import { updateExpense } from "../lib/expenses-io";
 import { validateExpenseInput } from "../utils";
-import { expensesDataPath } from "../constants";
 import { Expense } from "../types";
 
 type UpdateExpenseOptions = Pick<Expense, "name" | "amount" | "description">;
 
-export function updateExpense(id: string, options: UpdateExpenseOptions) {
-  const { name, amount, description } = options;
-
-  if (!validateExpenseInput({ name, amount, description })) {
+export async function updateExpenseAction(
+  id: string,
+  options: UpdateExpenseOptions
+) {
+  if (!validateExpenseInput(options)) {
     return;
   }
 
-  if (!fs.existsSync(expensesDataPath)) {
-    fs.writeFileSync(expensesDataPath, JSON.stringify([], null, 2));
-    console.error(`<====== FAILURE ======>`);
-    console.error(`No Expense found with id '${id}'.\n`);
-    return;
-  }
+  try {
+    const updatedExpense = await updateExpense(id, options);
 
-  fs.readFile(expensesDataPath, "ascii", (err, data) => {
-    if (err) throw err;
-
-    const expenses = (data ? JSON.parse(data) : []) as Expense[];
-    const expense = expenses.find((e) => e.id === id);
-    const now = new Date();
-
-    if (!expense) {
+    if (!updatedExpense) {
       console.error(`<====== FAILURE ======>`);
       console.error(`No Expense found with id '${id}'.\n`);
-      return;
-    }
-
-    if (name) expense.name = name;
-    if (amount) expense.amount = amount;
-    if (description) expense.description = description;
-    expense.updatedAt = now;
-
-    fs.writeFile(expensesDataPath, JSON.stringify(expenses, null, 2), (err) => {
-      if (err) throw err;
+    } else {
       console.log(`<====== SUCCESS ======>`);
-      console.log(`Expense with id '${expense.id}' was updated.\n`);
-    });
-  });
+      console.log(`Expense with id '${updatedExpense.id}' was updated.\n`);
+    }
+  } catch (e) {
+    console.error(`<====== OOPS ======>`);
+    console.error(`Something went wrong while updating expense`);
+    console.error(e);
+  }
 }
