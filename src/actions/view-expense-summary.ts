@@ -1,9 +1,13 @@
 import dateFns from "date-fns";
 import Table from "cli-table3";
 
-import { readExpenses } from "../lib/expenses-io";
-import { getExpensesSummary, calculateTotalExpenses } from "../lib/expenses";
+import { readExpenses } from "../lib/expenses";
+import {
+  getExpensesSummary,
+  calculateTotalExpenses,
+} from "../lib/expenses-calculation";
 import { formatCurrency, validateViewSummaryOptions } from "../utils";
+import { expensesJsonFilePath } from "../constants";
 import { Expense } from "../types";
 
 type ViewSummaryOptions = {
@@ -18,7 +22,7 @@ export async function viewExpenseSummary(options: ViewSummaryOptions) {
   }
 
   let expenses: Expense[] = [];
-  const readExpensesResult = await readExpenses();
+  const readExpensesResult = await readExpenses(expensesJsonFilePath);
 
   if (readExpensesResult) {
     expenses = readExpensesResult;

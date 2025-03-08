@@ -1,5 +1,6 @@
-import { updateExpense } from "../lib/expenses-io";
+import { updateExpense } from "../lib/expenses";
 import { validateExpenseInput } from "../utils";
+import { expensesJsonFilePath } from "../constants";
 import { Expense } from "../types";
 
 type UpdateExpenseOptions = Pick<Expense, "name" | "amount" | "description">;
@@ -13,7 +14,11 @@ export async function updateExpenseAction(
   }
 
   try {
-    const updatedExpense = await updateExpense(id, options);
+    const updatedExpense = await updateExpense(
+      expensesJsonFilePath,
+      id,
+      options
+    );
 
     if (!updatedExpense) {
       console.error(`<====== FAILURE ======>`);

@@ -1,11 +1,12 @@
 import Table from "cli-table3";
-import { readExpenses } from "../lib/expenses-io";
+import { readExpenses } from "../lib/expenses";
 import { formatCurrency } from "../utils";
+import { expensesJsonFilePath } from "../constants";
 import { Expense } from "../types";
 
 export async function listExpenses() {
   let expenses: Expense[] = [];
-  const readExpensesResult = await readExpenses();
+  const readExpensesResult = await readExpenses(expensesJsonFilePath);
 
   if (readExpensesResult) {
     expenses = readExpensesResult;

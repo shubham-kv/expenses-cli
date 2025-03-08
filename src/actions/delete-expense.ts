@@ -1,8 +1,9 @@
-import { deleteExpense } from "../lib/expenses-io";
+import { deleteExpense } from "../lib/expenses";
+import { expensesJsonFilePath } from "../constants";
 
 export async function deleteExpenseAction(id: string) {
   try {
-    const deletedExpense = await deleteExpense(id);
+    const deletedExpense = await deleteExpense(expensesJsonFilePath, id);
 
     if (!deletedExpense) {
       console.error(`<====== FAILURE ======>`);

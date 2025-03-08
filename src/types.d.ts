@@ -6,3 +6,5 @@ export type Expense = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type ExpenseData = Omit<Expense, "id" | "createdAt" | "updatedAt">;
