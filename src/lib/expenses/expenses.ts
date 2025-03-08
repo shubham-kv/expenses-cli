@@ -59,7 +59,7 @@ export const addExpense = (
 export const updateExpense = (
   expensesFilePath: PathLike,
   id: string,
-  data: ExpenseData
+  data: Partial<ExpenseData>
 ): Promise<Expense | null> => {
   return expensesReadWriteWrapper(expensesFilePath, (allExpenses) => {
     const expense = allExpenses.find((e) => e.id === id);
