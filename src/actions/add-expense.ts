@@ -1,41 +1,26 @@
-import fs from "fs";
-import { validateExpenseInput, generateNewId } from "../utils";
-import { expensesDataPath } from "../constants";
+import { validateExpenseInput } from "../utils";
 import { Expense } from "../types";
+import { addExpense } from "../lib/expenses-io";
 
-type AddExpenseOptions = Pick<Expense, 'amount'|'description'>;
+type AddExpenseOptions = Pick<Expense, "amount" | "description">;
 
-export function addExpense(name: string, options: AddExpenseOptions) {
+export async function addExpenseAction(
+  name: string,
+  options: AddExpenseOptions
+) {
   const { amount, description } = options;
 
   if (!validateExpenseInput({ name, amount, description })) {
     return;
   }
 
-  if (!fs.existsSync(expensesDataPath)) {
-    fs.writeFileSync(expensesDataPath, JSON.stringify([], null, 2));
+  try {
+    const newExpense = await addExpense({ name, amount, description });
+    console.log(`<====== SUCCESS ======>`);
+    console.log(`Expense with id '${newExpense.id}' was added.\n`);
+  } catch (e) {
+    console.error(`<====== OOPS ======>`);
+    console.error(`Something went wrong while adding expense`);
+    console.error(e);
   }
-
-  fs.readFile(expensesDataPath, "ascii", (err, data) => {
-    if (err) throw err;
-    const expenses = (data ? JSON.parse(data) : []) as Expense[];
-    const now = new Date();
-
-    const newExpense: Expense = {
-      id: generateNewId(),
-      name: name ?? "",
-      amount: amount,
-      description: description ?? "",
-      createdAt: now,
-      updatedAt: now,
-    };
-
-    expenses.push(newExpense);
-
-    fs.writeFile(expensesDataPath, JSON.stringify(expenses, null, 2), (err) => {
-      if (err) throw err;
-      console.log(`<====== SUCCESS ======>`);
-      console.log(`Expense with id '${newExpense.id}' was added.\n`);
-    });
-  });
 }

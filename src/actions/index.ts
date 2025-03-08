@@ -1,5 +1,5 @@
-export { addExpense } from "./add-expense";
-export { deleteExpense } from "./delete-expense";
+export { addExpenseAction as addExpense } from "./add-expense";
+export { deleteExpenseAction as deleteExpense } from "./delete-expense";
 export { listExpenses } from "./list-expenses";
-export { updateExpense } from "./update-expense";
+export { updateExpenseAction as updateExpense } from "./update-expense";
 export { viewExpenseSummary } from "./view-expense-summary";
