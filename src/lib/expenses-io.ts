@@ -14,10 +14,10 @@ const expensesReadWriteWrapper = async <
   mutateExpensesCallback: T
 ): Promise<R> => {
   try {
-    const expensesJsonString = await fsPromises.readFile(
-      expensesJsonFilePath,
-      "utf-8"
-    );
+    const expensesJsonString = await fsPromises.readFile(expensesJsonFilePath, {
+      encoding: "utf-8",
+      flag: "a+",
+    });
 
     const allExpenses: Expense[] = expensesJsonString
       ? JSON.parse(expensesJsonString)
