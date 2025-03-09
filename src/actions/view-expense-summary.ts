@@ -1,24 +1,28 @@
 import dateFns from "date-fns";
 import Table from "cli-table3";
+import { Command } from "@commander-js/extra-typings";
 
 import { getAllExpenses } from "../lib/expenses";
 import {
   getExpensesSummary,
   calculateTotalExpenses,
 } from "../lib/expenses-calculation";
-import { formatCurrency, validateViewSummaryOptions } from "../utils";
+import { formatCurrency, isIntegerString } from "../utils";
 import { expensesJsonFilePath } from "../constants";
 import { Expense } from "../types";
 
-type ViewSummaryOptions = {
-  month: number;
-};
+type ViewSummaryCommand = Command<[], { month?: string | undefined }, {}>;
 
-export async function viewExpenseSummary(options: ViewSummaryOptions) {
-  const { month } = options;
+export async function viewExpenseSummary(this: ViewSummaryCommand) {
+  const { month } = this.opts();
 
-  if (!validateViewSummaryOptions(options)) {
-    return;
+  if (
+    month !== undefined &&
+    !(isIntegerString(month) && parseInt(month) >= 1 && parseInt(month) <= 12)
+  ) {
+    this.error(
+      `<====== FAILURE ======>\nInvalid month, must be a number within 1 (Jan) to 12 (Dec).\n`
+    );
   }
 
   let allExpenses: Expense[] | null;
@@ -27,40 +31,32 @@ export async function viewExpenseSummary(options: ViewSummaryOptions) {
     allExpenses = await getAllExpenses(expensesJsonFilePath);
 
     if (!allExpenses) {
-      console.error(`<====== FAILURE ======>`);
-      console.error(
-        `No Expenses found, add your expenses with the 'add' command.\n`
+      this.error(
+        `<====== FAILURE ======>\nNo Expenses found, add your expenses with the 'add' command.\n`
       );
-      return;
     }
   } catch (e) {
-    console.error(`<====== OOPS ======>`);
-    console.error(
-      `Something went wrong while loading or parsing the data file.`
+    this.error(
+      `<====== OOPS ======>\nSomething went wrong while loading or parsing the data file.`
     );
-    return;
   }
 
   if (allExpenses.length === 0) {
-    console.error(`<====== FAILURE ======>`);
-    console.error(
-      `No Expenses found, add your expenses with the 'add' command.\n`
+    this.error(
+      `<====== FAILURE ======>\nNo Expenses found, add your expenses with the 'add' command.\n`
     );
-    return;
   }
 
   const summaryEntries = getExpensesSummary(allExpenses, {
-    month,
     sort: "desc",
+    ...(month ? { month: parseInt(month) } : {}),
   });
   const shouldDisplayTotal = !month;
 
   if (summaryEntries.length === 0) {
-    console.error(`<====== FAILURE ======>`);
-    console.error(
-      `No Expenses found for the given month in the current year.\n`
+    this.error(
+      `<====== FAILURE ======>\nNo Expenses found for the given month in the current year.\n`
     );
-    return;
   }
 
   const table = new Table({

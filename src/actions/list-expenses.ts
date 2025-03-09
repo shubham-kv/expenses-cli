@@ -1,10 +1,14 @@
+import { Command } from "@commander-js/extra-typings";
 import Table from "cli-table3";
+
 import { getAllExpenses } from "../lib/expenses";
 import { formatCurrency } from "../utils";
 import { expensesJsonFilePath } from "../constants";
 import { Expense } from "../types";
 
-export async function listExpenses() {
+type ListExpenseCommand = Command<[], {}, {}>;
+
+export async function listExpensesAction(this: ListExpenseCommand) {
   let allExpenses: Expense[] | null;
 
   try {

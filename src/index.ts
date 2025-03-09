@@ -6,7 +6,7 @@ import { name, description, version } from "../package.json";
 import {
   addExpenseAction,
   deleteExpenseAction,
-  listExpenses,
+  listExpensesAction,
   updateExpenseAction,
   viewExpenseSummary,
 } from "./actions";
@@ -42,17 +42,15 @@ program
 program
   .command("list")
   .description("List all the expenses")
-  .action(listExpenses);
+  .action(listExpensesAction);
 
 program
   .command("summary")
-  .description("Get the summary of your expenses by month")
+  .description("Get the summary of all expenses by month")
   .option(
     "-m, --month <month>",
-    "Number representing the month of the current year to show the summary for, from 1 - 12, 1 for January, 12 for December",
-    parseInt
+    "Number within 1 (Jan) to 12 (Dec) of the current year for which to display the summary"
   )
-  // @ts-ignore
   .action(viewExpenseSummary);
 
 program.parse(process.argv);
