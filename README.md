@@ -1,11 +1,12 @@
 
-# expenses-cli
+## Features
 
-Simple CLI tool to manage your expenses.
+- Add, edit, delete & list all your expenses
+- View summary of your total expenses by month or filter for a specific month
 
-## Get Started
+## Getting Started
 
-Install the package globally with `npm` or from a package manager of your liking.
+Install the package globally with `npm` (or `yarn`, etc.)
 
 ```bash
 npm install --global @shubhamkv/expenses-cli
