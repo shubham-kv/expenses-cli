@@ -1,24 +1,35 @@
+import { Command } from "@commander-js/extra-typings";
 import { addExpense } from "../lib/expenses";
-import { validateExpenseInput } from "../utils";
 import { expensesJsonFilePath } from "../constants";
-import { Expense } from "../types";
+import { isNumString } from "../utils";
 
-type AddExpenseOptions = Pick<Expense, "amount" | "description">;
+type AddExpenseCommand = Command<
+  [string],
+  {
+    amount: string;
+    description?: string | undefined;
+  },
+  {}
+>;
 
-export async function addExpenseAction(
-  name: string,
-  options: AddExpenseOptions
-) {
-  const { amount, description } = options;
+export async function addExpenseAction(this: AddExpenseCommand): Promise<void> {
+  const [name] = this.processedArgs;
+  const { amount, description } = this.opts();
 
-  if (!validateExpenseInput({ name, amount, description })) {
-    return;
+  if (name !== undefined && name === "") {
+    this.error(`<====== FAILURE ======>\nInvalid name, cannot be empty.\n`);
+  }
+
+  if (!(isNumString(amount) && parseFloat(amount) > 0)) {
+    this.error(
+      `<====== FAILURE ======>\nInvalid amount, expected a valid positive number.\n`
+    );
   }
 
   try {
     const newExpense = await addExpense(expensesJsonFilePath, {
       name,
-      amount,
+      amount: parseFloat(amount),
       description,
     });
     console.log(`<====== SUCCESS ======>`);

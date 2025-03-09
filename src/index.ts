@@ -25,7 +25,6 @@ program
     "-a, --amount <amount>",
     "Expense amount, a positive number"
   )
-  // @ts-ignore
   .action(addExpenseAction);
 
 program

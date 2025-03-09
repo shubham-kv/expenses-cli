@@ -2,7 +2,7 @@ import fs from "fs/promises";
 import { existsSync, PathLike } from "fs";
 
 import { generateNewId } from "../../utils";
-import { Expense, ExpenseData } from "../../types";
+import { AddExpenseData, Expense, ExpenseData } from "../../types";
 
 const expensesReadWriteWrapper = async <
   T extends (allExpenses: Expense[]) => R,
@@ -38,15 +38,15 @@ const expensesReadWriteWrapper = async <
 
 export const addExpense = (
   expensesFilePath: PathLike,
-  expenseToAdd: ExpenseData
+  addExpenseData: AddExpenseData
 ): Promise<Expense> => {
   return expensesReadWriteWrapper(expensesFilePath, (allExpenses) => {
     const now = new Date();
     const newExpense: Expense = {
       id: generateNewId(),
-      name: expenseToAdd.name ?? "",
-      amount: expenseToAdd.amount,
-      description: expenseToAdd.description ?? "",
+      name: addExpenseData.name,
+      amount: addExpenseData.amount,
+      description: addExpenseData.description ?? "",
       createdAt: now,
       updatedAt: now,
     };
