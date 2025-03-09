@@ -1,7 +1,7 @@
 import dateFns from "date-fns";
 import Table from "cli-table3";
 
-import { readExpenses } from "../lib/expenses";
+import { getAllExpenses } from "../lib/expenses";
 import {
   getExpensesSummary,
   calculateTotalExpenses,
@@ -21,16 +21,27 @@ export async function viewExpenseSummary(options: ViewSummaryOptions) {
     return;
   }
 
-  let expenses: Expense[] = [];
-  const readExpensesResult = await readExpenses(expensesJsonFilePath);
+  let allExpenses: Expense[] | null;
 
-  if (readExpensesResult) {
-    expenses = readExpensesResult;
-  } else {
+  try {
+    allExpenses = await getAllExpenses(expensesJsonFilePath);
+
+    if (!allExpenses) {
+      console.error(`<====== FAILURE ======>`);
+      console.error(
+        `No Expenses found, add your expenses with the 'add' command.\n`
+      );
+      return;
+    }
+  } catch (e) {
+    console.error(`<====== OOPS ======>`);
+    console.error(
+      `Something went wrong while loading or parsing the data file.`
+    );
     return;
   }
 
-  if (expenses.length === 0) {
+  if (allExpenses.length === 0) {
     console.error(`<====== FAILURE ======>`);
     console.error(
       `No Expenses found, add your expenses with the 'add' command.\n`
@@ -38,13 +49,11 @@ export async function viewExpenseSummary(options: ViewSummaryOptions) {
     return;
   }
 
-  const summaryEntries = getExpensesSummary(expenses, {
+  const summaryEntries = getExpensesSummary(allExpenses, {
     month,
     sort: "desc",
   });
   const shouldDisplayTotal = !month;
-  const totalExpenses = calculateTotalExpenses(expenses);
-  const formattedTotalExpenses = formatCurrency(totalExpenses);
 
   if (summaryEntries.length === 0) {
     console.error(`<====== FAILURE ======>`);
@@ -68,6 +77,9 @@ export async function viewExpenseSummary(options: ViewSummaryOptions) {
   );
 
   if (shouldDisplayTotal) {
+    const totalExpenses = calculateTotalExpenses(allExpenses);
+    const formattedTotalExpenses = formatCurrency(totalExpenses);
+
     table.push(
       ...[
         [undefined, undefined, undefined],

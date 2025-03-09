@@ -99,12 +99,10 @@ export const deleteExpense = (
   });
 };
 
-export const readExpenses = async (expensesFilePath: PathLike) => {
+export const getAllExpenses = async (
+  expensesFilePath: PathLike
+): Promise<Expense[] | null> => {
   if (!existsSync(expensesFilePath)) {
-    console.error(`<====== FAILURE ======>`);
-    console.error(
-      `No Expenses found, add your expenses with the 'add' command.\n`
-    );
     return null;
   }
 
@@ -112,21 +110,14 @@ export const readExpenses = async (expensesFilePath: PathLike) => {
   try {
     data = await fs.readFile(expensesFilePath, "utf-8");
   } catch (e) {
-    console.error(`<====== OOPS ======>`);
-    console.error(`Something went wrong while loading the data file.`);
-    console.error(e);
-    return null;
+    throw e;
   }
 
   let parsedExpenses: Expense[];
   try {
     parsedExpenses = JSON.parse(data);
   } catch (e) {
-    console.error(`<====== OOPS ======>`);
-    console.error(`Something went wrong while parsing the saved data.`);
-    console.error(e);
-    return null;
+    throw e;
   }
-
   return parsedExpenses;
 };

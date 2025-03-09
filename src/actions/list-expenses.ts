@@ -1,16 +1,27 @@
 import Table from "cli-table3";
-import { readExpenses } from "../lib/expenses";
+import { getAllExpenses } from "../lib/expenses";
 import { formatCurrency } from "../utils";
 import { expensesJsonFilePath } from "../constants";
 import { Expense } from "../types";
 
 export async function listExpenses() {
-  let expenses: Expense[] = [];
-  const readExpensesResult = await readExpenses(expensesJsonFilePath);
+  let allExpenses: Expense[] | null;
 
-  if (readExpensesResult) {
-    expenses = readExpensesResult;
-  } else {
+  try {
+    allExpenses = await getAllExpenses(expensesJsonFilePath);
+
+    if (!allExpenses) {
+      console.error(`<====== FAILURE ======>`);
+      console.error(
+        `No Expenses found, add your expenses with the 'add' command.\n`
+      );
+      return;
+    }
+  } catch (e) {
+    console.error(`<====== OOPS ======>`);
+    console.error(
+      `Something went wrong while loading or parsing the data file.`
+    );
     return;
   }
 
@@ -20,7 +31,7 @@ export async function listExpenses() {
   });
 
   table.push(
-    ...expenses.map((e, i) => [
+    ...allExpenses.map((e, i) => [
       i + 1,
       e.id,
       new Date(e.createdAt).toLocaleString(),
