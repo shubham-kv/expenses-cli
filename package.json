@@ -10,6 +10,7 @@
     "test:cov": "vitest run --silent --coverage",
     "prebuild": "rimraf dist",
     "build": "tsc -p ./tsconfig.build.json",
+    "local-build": "npm run build && npm link",
     "postbuild": "if [ \"$(uname -s)\" = \"Darwin\" ] || [ \"$(uname -s)\" = \"Linux\" ]; then chmod +x dist/index.js; fi"
   },
   "bin": {
@@ -23,6 +24,7 @@
   "author": "Shubham Vishwakarma",
   "license": "ISC",
   "dependencies": {
+    "@commander-js/extra-typings": "^13.1.0",
     "cli-table3": "^0.6.5",
     "commander": "^13.1.0",
     "date-fns": "^4.1.0",
