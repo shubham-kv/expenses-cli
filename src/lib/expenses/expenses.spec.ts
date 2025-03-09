@@ -9,7 +9,7 @@ import {
   afterAll,
 } from "vitest";
 
-import { addExpense, deleteExpense, updateExpense } from "./expenses";
+import { addExpense, deleteExpense, getAllExpenses, updateExpense } from "./expenses";
 import { Expense, ExpenseData } from "../../types";
 
 const expenseStub = () => ({
@@ -165,6 +165,32 @@ describe("expense service", () => {
 
       test("should return the deleted expense", async () => {
         expect(deleteResult).toMatchObject({id: expenseStub().id});
+      });
+    });
+  });
+
+  describe("getAllExpenses", () => {
+    describe("when getAllExpenses is and data file doesn't exist", () => {
+      test("should return null", async () => {
+        await expect(getAllExpenses(testExpensesFilePath)).resolves.toBe(null);
+      });
+    });
+
+    describe("when getAllExpenses is called and file exists", () => {
+      let getAllExpensesResult: Expense[] | null;
+
+      writeAndDeleteTestExpenses();
+
+      beforeAll(async () => {
+        getAllExpensesResult = await getAllExpenses(
+          testExpensesFilePath,
+        );
+      });
+
+      test("should return all expenses", async () => {
+        const data = await fs.readFile(testExpensesFilePath, "utf-8");
+        const allExpenses: Expense[] = data ? JSON.parse(data) : [];
+        expect(allExpenses).toStrictEqual(getAllExpensesResult)
       });
     });
   });
