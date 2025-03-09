@@ -5,7 +5,7 @@ import { name, description, version } from "../package.json";
 
 import {
   addExpenseAction,
-  deleteExpense,
+  deleteExpenseAction,
   listExpenses,
   updateExpenseAction,
   viewExpenseSummary,
@@ -34,9 +34,10 @@ program
   .action(updateExpenseAction);
 
 program
-  .command("delete <id>")
-  .description("Delete an expense with the given id.")
-  .action(deleteExpense);
+  .command("delete")
+  .argument("<id>", "Id of the expense to delete")
+  .description("Delete the expense with the given id")
+  .action(deleteExpenseAction);
 
 program
   .command("list")

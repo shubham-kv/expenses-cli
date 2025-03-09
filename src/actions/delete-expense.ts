@@ -1,7 +1,12 @@
+import { Command } from "@commander-js/extra-typings";
 import { deleteExpense } from "../lib/expenses";
 import { expensesJsonFilePath } from "../constants";
 
-export async function deleteExpenseAction(id: string) {
+type DeleteExpenseCommand = Command<[string], {}, {}>;
+
+export async function deleteExpenseAction(this: DeleteExpenseCommand) {
+  const [id] = this.processedArgs;
+
   try {
     const deletedExpense = await deleteExpense(expensesJsonFilePath, id);
 
