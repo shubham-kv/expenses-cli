@@ -1,16 +1,38 @@
+import { Command } from "@commander-js/extra-typings";
 import Table from "cli-table3";
-import { readExpenses } from "../lib/expenses-io";
+
+import { getAllExpenses } from "../lib/expenses";
 import { formatCurrency } from "../utils";
+import { expensesJsonFilePath } from "../constants";
 import { Expense } from "../types";
 
-export async function listExpenses() {
-  let expenses: Expense[] = [];
-  const readExpensesResult = await readExpenses();
+type ListExpenseCommand = Command<[], {}, {}>;
 
-  if (readExpensesResult) {
-    expenses = readExpensesResult;
-  } else {
+export async function listExpensesAction(this: ListExpenseCommand) {
+  let allExpenses: Expense[] | null;
+
+  try {
+    allExpenses = await getAllExpenses(expensesJsonFilePath);
+
+    if (!allExpenses) {
+      console.error(`<====== FAILURE ======>`);
+      console.error(
+        `No Expenses found, add your expenses with the 'add' command.\n`
+      );
+      return;
+    }
+  } catch (e) {
+    console.error(`<====== OOPS ======>`);
+    console.error(
+      `Something went wrong while loading or parsing the data file.`
+    );
     return;
+  }
+
+  if (allExpenses.length === 0) {
+    this.error(
+      `<====== FAILURE ======>\nNo Expenses found, add your expenses with the 'add' command.\n`
+    );
   }
 
   const table = new Table({
@@ -19,7 +41,7 @@ export async function listExpenses() {
   });
 
   table.push(
-    ...expenses.map((e, i) => [
+    ...allExpenses.map((e, i) => [
       i + 1,
       e.id,
       new Date(e.createdAt).toLocaleString(),

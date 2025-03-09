@@ -6,3 +6,7 @@ export type Expense = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type AddExpenseData = Pick<Expense, "name" | "amount"> &
+  Partial<Pick<Expense, "description">>;
+export type ExpenseData = Omit<Expense, "id" | "createdAt" | "updatedAt">;

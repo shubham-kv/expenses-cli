@@ -1,3 +1,7 @@
+import { nanoid } from "nanoid";
+
+export const generateNewId = () => nanoid(8);
+
 export const formatCurrency = (value: number) => {
   const locale = Intl.DateTimeFormat().resolvedOptions().locale;
 

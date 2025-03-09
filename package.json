@@ -5,8 +5,12 @@
   "main": "dist/index.js",
   "type": "commonjs",
   "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest --watch",
+    "test:cov": "vitest run --silent --coverage",
     "prebuild": "rimraf dist",
     "build": "tsc -p ./tsconfig.build.json",
+    "local-build": "npm run build && npm link",
     "postbuild": "if [ \"$(uname -s)\" = \"Darwin\" ] || [ \"$(uname -s)\" = \"Linux\" ]; then chmod +x dist/index.js; fi"
   },
   "bin": {
@@ -20,6 +24,7 @@
   "author": "Shubham Vishwakarma",
   "license": "ISC",
   "dependencies": {
+    "@commander-js/extra-typings": "^13.1.0",
     "cli-table3": "^0.6.5",
     "commander": "^13.1.0",
     "date-fns": "^4.1.0",
@@ -28,8 +33,11 @@
   },
   "devDependencies": {
     "@types/node": "^22.13.9",
+    "@vitest/coverage-v8": "^3.0.8",
+    "memfs": "^4.17.0",
     "semantic-release": "^24.2.3",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.8"
   },
   "files": [
     "dist",
