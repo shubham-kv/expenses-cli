@@ -55,31 +55,34 @@ describe("expense service", () => {
     });
 
     describe("when addExpense is called and file exists", () => {
-      let newExpenseData: ExpenseData;
+      let addExpenseData: ExpenseData;
       let addResult: Expense | undefined;
 
       writeAndDeleteTestExpenses();
 
       beforeEach(async () => {
-        newExpenseData = {
+        addExpenseData = {
           name: "Dummy Expense",
           amount: expenseStub().amount,
           description: expenseStub().description,
         };
-        addResult = await addExpense(testExpensesFilePath, newExpenseData);
+        addResult = await addExpense(testExpensesFilePath, addExpenseData);
       });
 
       test("should add the expense to json file", async () => {
         const data = await fs.readFile(testExpensesFilePath, "utf-8");
         const allExpenses: Expense[] = data ? JSON.parse(data) : [];
         const foundExpense = allExpenses.find(
-          (e) => e.name === newExpenseData.name
+          (e) =>
+            e.name === addExpenseData.name &&
+            e.amount === addExpenseData.amount &&
+            e.description === addExpenseData.description
         );
-        expect(foundExpense).toMatchObject(newExpenseData);
+        expect(foundExpense).toBeDefined();
       });
 
       test("should return the saved expense", async () => {
-        expect(addResult).toMatchObject(newExpenseData);
+        expect(addResult).toMatchObject(addExpenseData);
       });
     });
   });
@@ -123,7 +126,7 @@ describe("expense service", () => {
             e.amount === updateData.amount &&
             e.description === updateData.description
         );
-        expect(foundExpense).toMatchObject(updateData);
+        expect(foundExpense).toBeDefined();
       });
 
       test("should return the updated expense", async () => {
