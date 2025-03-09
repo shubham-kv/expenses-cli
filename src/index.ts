@@ -5,9 +5,9 @@ import { name, description, version } from "../package.json";
 
 import {
   addExpenseAction,
-  updateExpense,
   deleteExpense,
   listExpenses,
+  updateExpenseAction,
   viewExpenseSummary,
 } from "./actions";
 
@@ -21,20 +21,17 @@ program
   .argument("<name>", "Expense name")
   .description("Add a new expense")
   .option("-d, --description <description>", "Text describing the expense")
-  .requiredOption(
-    "-a, --amount <amount>",
-    "Expense amount, a positive number"
-  )
+  .requiredOption("-a, --amount <amount>", "Expense amount, a positive number")
   .action(addExpenseAction);
 
 program
-  .command("edit <id>")
-  .description("Edit an existing expense with the given id.")
-  .option("-n, --name <name>", "Name of the expense")
+  .command("edit")
+  .argument("<id>", "Id of the expense to edit")
+  .description("Edit an existing expense with the given id")
+  .option("-n, --name <name>", "Expense name")
   .option("-d, --description <description>", "Text describing the expense")
-  .option("-a, --amount <amount>", "Expense amount", parseFloat)
-  // @ts-ignore
-  .action(updateExpense);
+  .option("-a, --amount <amount>", "Expense amount, a positive number")
+  .action(updateExpenseAction);
 
 program
   .command("delete <id>")
