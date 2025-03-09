@@ -20,7 +20,9 @@ export async function updateExpenseAction(
   const [id] = this.processedArgs;
   const { name, amount, description } = this.opts();
 
-  if (!name && !amount && !description) {
+  if (
+    !(name !== undefined || amount !== undefined || description !== undefined)
+  ) {
     this.error(
       `<====== FAILURE ======>\nInvalid options, at-least one option required.\n`
     );
