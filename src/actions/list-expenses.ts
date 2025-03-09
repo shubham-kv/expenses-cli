@@ -29,6 +29,12 @@ export async function listExpensesAction(this: ListExpenseCommand) {
     return;
   }
 
+  if (allExpenses.length === 0) {
+    this.error(
+      `<====== FAILURE ======>\nNo Expenses found, add your expenses with the 'add' command.\n`
+    );
+  }
+
   const table = new Table({
     head: ["No.", "Id", "Timestamp", "Name", "Amount", "Description"],
     style: { head: [], compact: true },
